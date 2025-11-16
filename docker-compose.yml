@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./Backend
+    container_name: "backend"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb+srv://samirparvez48_db_user:qIdES3LuvUvl8dsD@cluster0.jfxha6s.mongodb.net/?appName=Cluster0
+      - JWT_SECRET=51c401e7c590aef9f267c65839236f82347ca4e9b646430d0016d77147fbd91dcc1b1cc637dccfd8535a345a1eb712e9853f938b395078465639d54f99bf9f9c
+      - NODE_ENV=production
+      - UPSTASH_REDIS_REST_URL=https://valued-cardinal-7065.upstash.io
+      - UPSTASH_REDIS_REST_TOKEN=ARuZAAImcDJhYmI5NTllM2E4YTI0NmYwYTRhN2MwMTIxNzBhMDljNnAyNzA2NQ
+      - RABBITMQ_URL=amqp://user:user123@rabbitmq:5672
+    networks:
+      - app-network
+  notificationservice:
+    build: ./NotificationService
+    container_name: "notificationservice"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "4002:4002"
+    env_file:
+      - ./NotificationService/.env
+    networks:
+      - app-network
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: "rabbitmq"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=user123
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
