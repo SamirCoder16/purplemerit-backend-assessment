@@ -7,7 +7,7 @@ import { ENV } from "./lib/env.js";
 import connectDB from "./config/db.config.js";
 import authRouter from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
-import './config/redis.config.js';
+import "./config/redis.config.js";
 import { connectRabbitMQ } from "./rabbitmq/producer.js";
 
 const app = express();
@@ -18,12 +18,16 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(
   cors({
-    origin: "https://codecraft-fs-01-frontend.vercel.app",
+    origin: [
+      "https://codecraft-fs-01-frontend.vercel.app",
+      "https://codecraft-fs-01-frontend-h1nq3ytdl-samirs-projects-0679fa8b.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
