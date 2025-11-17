@@ -9,7 +9,7 @@ RUN apk add --no-cache python3 g++ make
 COPY package*.json ./
 
 # Use install instead of ci
-RUN npm install --omit=dev
+RUN npm install --production
 
 COPY . .
 
