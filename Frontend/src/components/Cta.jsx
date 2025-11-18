@@ -28,7 +28,9 @@ const Cta = () => {
         <h1 className="text-4xl md:text-5xl md:leading-[60px] font-semibold max-w-xl mt-5 bg-linear-to-r from-white to-[#CAABFF] text-transparent bg-clip-text">
           Unlock your next big opportunity.
         </h1>
-        <button className="cursor-pointer px-8 py-3 text-white active:scale-95 bg-violet-600 hover:bg-violet-700 transition-all rounded-full text-sm mt-8">
+        <button
+        onClick={() => navigate('/auth/register')}
+         className="cursor-pointer px-8 py-3 text-white active:scale-95 bg-violet-600 hover:bg-violet-700 transition-all rounded-full text-sm mt-8">
           Register Now
         </button>
       </div>

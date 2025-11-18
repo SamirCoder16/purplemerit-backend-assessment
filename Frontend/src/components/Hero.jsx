@@ -133,12 +133,12 @@ const Hero = () => {
               Auth System that helps you to manage your users easily.
             </p>
             <div className="flex items-center gap-4 mt-8 text-sm">
-              <button className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white active:scale-95 transition rounded-md px-7 h-11">
+              <button
+              onClick={() => {
+                navigate("/auth/register");
+              }}
+               className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white active:scale-95 transition rounded-md px-7 h-11">
                 Get started
-              </button>
-              <button className="flex items-center cursor-pointer gap-2 border border-slate-600 active:scale-95 hover:bg-white/10 transition text-slate-600 rounded-md px-6 h-11">
-                <Video />
-                <span>Watch demo</span>
               </button>
             </div>
           </div>
