@@ -136,7 +136,7 @@ const Hero = () => {
             <div className="flex items-center gap-4 mt-8 text-sm">
               {user ? (
                 <button className="flex items-center gap-2 bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white active:scale-95 transition rounded-md px-4 py-2">
-                  <User2Icon className="h-8 w-8" />
+                  <User2Icon className="h-6 w-6" />
                   <span>{user.userName}</span>
                 </button>
               ) : (
