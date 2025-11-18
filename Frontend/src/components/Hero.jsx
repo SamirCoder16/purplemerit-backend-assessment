@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Video, Menu, X } from "lucide-react";
+import { Video, Menu, X, User2Icon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { triggerConfetti } from "../utils/triggerConfetti";
@@ -53,9 +53,10 @@ const Hero = () => {
               <div className="flex w-100 gap-6 items-center justify-between px-3 relative">
                 {/* User Info + Role */}
                 <div className="relative flex flex-col items-center">
-                  <div 
-                  onClick={() => triggerConfetti()}
-                  className="h-10 cursor-pointer w-40 bg-linear-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center relative overflow-hidden">
+                  <div
+                    onClick={() => triggerConfetti()}
+                    className="h-10 cursor-pointer w-40 bg-linear-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center relative overflow-hidden"
+                  >
                     <div className="absolute inset-0 bg-purple-300/40 animate-pulse"></div>
                     <div className="relative z-10 h-8 w-36 bg-purple-100/90 rounded-lg flex items-center justify-center text-purple-800 font-medium shadow-sm">
                       {user?.userName || "Loading..."}
@@ -66,8 +67,8 @@ const Hero = () => {
 
                   <div
                     onClick={() => {
-                      navigate("/profile/edit")
-                    } }
+                      navigate("/profile/edit");
+                    }}
                     className="h-8 w-22 bg-purple-200 text-purple-800 text-sm font-semibold flex items-center justify-center rounded-md shadow-md cursor-pointer animate-swing"
                   >
                     Edit Profile
@@ -133,19 +134,21 @@ const Hero = () => {
               Auth System that helps you to manage your users easily.
             </p>
             <div className="flex items-center gap-4 mt-8 text-sm">
-              <button
-              onClick={() => {
-                navigate("/auth/register");
-              }}
-               className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white active:scale-95 transition rounded-md px-7 h-11">
-                {
-                  user ? (
-                    <span>Welcome, {user?.userName}</span>
-                  ) : (
-                  "Get Started for Free"
-                  )
-                }
-              </button>
+              {user ? (
+                <button className="flex items-center gap-2 bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white active:scale-95 transition rounded-md px-4 py-2">
+                  <User2Icon className="h-8 w-8" />
+                  <span>{user.userName}</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    navigate("/auth/register");
+                  }}
+                  className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white active:scale-95 transition rounded-md px-7 h-11"
+                >
+                  Get Started
+                </button>
+              )}
             </div>
           </div>
 
