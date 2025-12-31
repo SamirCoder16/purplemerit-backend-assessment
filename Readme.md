@@ -3,7 +3,7 @@
 A small, production-ready example showing user authentication and role-based access control (RBAC) using Node.js, Express, MongoDB, Redis, and RabbitMQ. The repository contains a Backend API, a Notification microservice, and (placeholder) Frontend wiring and Docker Compose configuration to run everything together.
 
 ## Contents
-
+ 
 - `Backend/` — Express API for authentication, RBAC, and user management (MongoDB).
 - `NotificationService/` — Background service to send emails (RabbitMQ consumers).
 - `docker-compose.yml` — Compose file to start services for local development.
