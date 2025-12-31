@@ -1,0 +1,145 @@
+.animate-swing {
+  animation: swing 2s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+
+/* Layout */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  font-family: system-ui, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.menu h3 {
+  margin-bottom: 20px;
+}
+
+.menu-item {
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  background: #1e293b;
+}
+
+.profile {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.avatar {
+  background: #2563eb;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.role {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 24px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background: #f8fafc;
+}
+
+/* Status */
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Buttons */
+button {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button.success {
+  background: #22c55e;
+  color: #fff;
+}
+
+button.danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* mobile Responsive */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .menu {
+    flex: 1;
+  }
+  .menu-item {
+    margin-right: 10rem;
+  }
+
+  .profile {
+    margin-top: 1rem;
+  }
+}
+

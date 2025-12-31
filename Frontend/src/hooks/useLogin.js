@@ -12,7 +12,7 @@ const useLogin = () => {
 
   const { mutateAsync, isLoading, isError, error } = useMutation({
     mutationFn: login,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.success("welcome back to NEVERMORE!");
       await updateUser();
       navigate("/");

@@ -3,7 +3,8 @@ import authRepository from "../service/auth.service.js";
 import jwt from "jsonwebtoken";
 import { ENV } from "../lib/env.js";
 import redisClient from "../config/redis.config.js";
-import { sendToQueue } from "../rabbitmq/producer.js";
+import { sendMail } from "../utils/sendMail.js";
+import User from "../models/user.model.js";
 
 export const registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -40,16 +41,6 @@ export const registerUser = async (req, res) => {
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-
-    // Send welcome email message to RabbitMQ
-    await sendToQueue("mail_exchange", "send_mail_welcome", {
-      email: newUser.email,
-      name: newUser.userName,
-    });
-    console.log(
-      "Welcome email message sent to RabbitMQ for user:",
-      newUser.email
-    );
     res
       .status(201)
       .json({ message: "User register Successfull", token, user: newUser });
@@ -123,6 +114,37 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const getOnlyUsersForAdmin = async (req, res) => {
+  try {
+    const role = req?.user?.role?.toLowerCase();
+    if (role !== "admin") {
+      return res.status(403).json({ message: "Forbidden access" });
+    }
+
+    // query params
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const { users, totalUsers } = await authRepository.getOnlyUsers({
+      page,
+      limit,
+    });
+
+    res.status(200).json({
+      users,
+      pagination: {
+        totalUsers,
+        currentPage: page,
+        totalPages: Math.ceil(totalUsers / limit),
+        limit,
+      },
+    });
+  } catch (error) {
+    console.log("Error fetching users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const updateUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -144,7 +166,7 @@ export const updateUser = async (req, res) => {
     }
 
     const updatedUser = await authRepository.updateUserById(userId, {
-      userName
+      userName,
     });
 
     const token = jwt.sign(
@@ -189,16 +211,7 @@ export const forgotPassword = async (req, res) => {
     redisClient.set(`passwordReset:${normalizeEmail}`, otp, {
       EX: 15 * 60, // Expire in 15 minutes
     });
-    // Send password reset email message to RabbitMQ
-    await sendToQueue("mail_exchange", "send_mail_password_reset", {
-      email: user.email,
-      name: user.userName,
-      otp,
-    });
-    console.log(
-      "Password reset email maessage sent to RabitMQ for user: ",
-      user.email
-    );
+    await sendMail(email, "Password Reset OTP", otp);
 
     res.status(200).json({ message: "Password reset OTP sent to email" });
   } catch (error) {
@@ -257,6 +270,78 @@ export const getMe = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+export const updateUserStatustoInActive = async (req, res) => {
+  try {
+    const { id: adminId, role } = req.user;
+
+    if (!adminId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    if (role?.toLowerCase() !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Only admin can update user status" });
+    }
+
+    const { id } = req.params;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { status: "inactive" },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User status updated to inactive successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateUserStatustoActive = async (req, res) => {
+  try {
+    const { id: adminId, role } = req.user;
+
+    if (!adminId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    if (role?.toLowerCase() !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Only admin can update user status" });
+    }
+
+    const { id } = req.params;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { status: "active" },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User status updated to active successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
