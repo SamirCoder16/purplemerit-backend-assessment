@@ -43,7 +43,9 @@ const RegisterPage = () => {
         });
         e.target.reset();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error in form suvbmission : ", error)
+    }
   };
 
   const handleChange = (e) => {

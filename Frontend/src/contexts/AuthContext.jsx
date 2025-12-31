@@ -16,6 +16,7 @@ export const AuthContextProvider = ({ children }) => {
       setUser(res.user);
       setIsAuthenticated(true);
     } catch (error) {
+      console.log(error);
       setUser(null);
       setIsAuthenticated(false);
     }

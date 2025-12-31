@@ -7,7 +7,7 @@ import Loader from "./Loader";
 import Logout from "./Logout";
 
 const Hero = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const logo = ["N", "E", "V", "E", "R", "M", "O", "R", "E"];
@@ -39,12 +39,23 @@ const Hero = () => {
             <Link to="/" className="hover:text-slate-500 text-lg transition">
               Home
             </Link>
-            <Link
-              to="/all/users"
-              className="hover:text-slate-500 text-lg transition"
-            >
-              Users
-            </Link>
+
+            {isAuthenticated &&
+              (user?.role === "user" ? (
+                <Link
+                  to="/all/users"
+                  className="hover:text-slate-500 text-lg transition"
+                >
+                  User
+                </Link>
+              ) : (
+                <Link
+                  to="/admin/dashboard"
+                  className="hover:text-slate-500 text-lg transition"
+                >
+                  Dashboard
+                </Link>
+              ))}
           </div>
 
           {/* Desktop Button */}
