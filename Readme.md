@@ -5,7 +5,6 @@ A small, production-ready example showing user authentication and role-based acc
 ## Contents
  
 - `Backend/` — Express API for authentication, RBAC, and user management (MongoDB).
-- `NotificationService/` — Background service to send emails (RabbitMQ consumers).
 - `docker-compose.yml` — Compose file to start services for local development.
 
 ## Highlights
@@ -13,20 +12,16 @@ A small, production-ready example showing user authentication and role-based acc
 - JWT-based authentication and roles (RBAC).
 - MongoDB for persistent user storage.
 - Redis for caching / session helpers.
-- RabbitMQ for event-driven email notifications.
 - Docker + Docker Compose for easy local startup.
 
 ## Quick architecture overview
 
 - Client (Frontend) -> Backend API (Express) for auth and protected endpoints.
-- Backend publishes events (user registered, forgot password) to RabbitMQ.
-- NotificationService consumes those events and sends emails via SMTP.
 
 For code and routes, see:
 
 - `Backend/src/routes/auth.routes.js`
 - `Backend/src/controllers/auth.controller.js`
-- `NotificationService/src/rabbitmq/*.js`
 
 ## Prerequisites
 
@@ -46,7 +41,6 @@ PORT=5000
 MONGODB_URI=mongodb://mongodb:27017/userauth
 REDIS_HOST=redis
 REDIS_PORT=6379
-RABBITMQ_URL=amqp://rabbitmq
 JWT_SECRET=your_jwt_secret_here
 JWT_EXPIRES_IN=24h
 SMTP_HOST=smtp.example.com
@@ -144,7 +138,6 @@ For exact route names and request/response shapes, inspect the route and control
 ## Troubleshooting
 
 - MongoDB connection failure: ensure the Mongo container is up or your `MONGODB_URI` is reachable.
-- RabbitMQ errors: ensure `RABBITMQ_URL` is correct and the service is up in Docker Compose.
 - SMTP/email fails: verify SMTP credentials and that NotificationService has access to SMTP host.
 - Port conflicts: change `PORT` env vars or stop the processes using those ports.
 
@@ -172,17 +165,5 @@ If you'd like to contribute:
 - Provide a Postman collection or OpenAPI/Swagger spec.
 - Add unit/integration tests and a CI pipeline.
 
-## License
 
-This project does not include a license file. Add `LICENSE` with the license you prefer (MIT is common for examples).
-
----
-
-If you want, I can also:
-
-- generate a Postman collection for the auth endpoints,
-- create a sample `.env.example` files in `Backend/` and `NotificationService/`, or
-- add a minimal `README` for the `Backend/` folder with exact env names copied from the code.
-
-Tell me which follow-up you prefer and I'll do it next.
 
